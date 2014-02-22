@@ -1,0 +1,9 @@
+div#main
+{
+	margin-top: 50px;
+}
+
+div.result.focused
+{
+	background-color: #EEE;
+}

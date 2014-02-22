@@ -1,0 +1,54 @@
+{
+	"types": {
+		"Customer": {
+			"handle": "Customers...",
+			"description": "Manage customers"
+		},
+		"Product": {
+			"handle": "Products...",
+			"description": "Manage products"
+		}
+	},
+	"data": {
+		"Blue Summer Dress": {
+			"characteristics": {
+				"Category": ["Dresses", "Women"],
+				"Fabric": "Silk",
+				"Color": "Blue"
+			},
+			"type": "Product"
+		},
+		"Sexy Summer Dress": {
+			"characteristics": {
+				"Category": ["Dresses", "Short Dresses"],
+				"Fabric": "Wool",
+				"Color": "White"
+			},
+			"type": "Product"
+		},
+		"Biker Jacket": {
+			"characteristics": {
+				"Category": ["Men"],
+				"Fabric": "Leather",
+				"Color": "Black"
+			},
+			"type": "Product"
+		},
+		"John Doe": {
+			"characteristics": {
+				"firstname": "John",
+				"lastname": "Doe",
+				"email": "pub@prestashop.com"
+			},
+			"type": "Customer"
+		},
+		"Jenny Bim": {
+			"characteristics": {
+				"firstname": "Jenny",
+				"lastname": "Bim",
+				"email": "jenny.b@imb.com"
+			},
+			"type": "Customer"
+		}
+	}
+}
