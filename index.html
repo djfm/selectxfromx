@@ -26,6 +26,9 @@
 					<p ng-if="focusedResultKind() === 'entity'" class="help-block">Hit Tab to display the focused entity's available actions.</p>
 				</div>
 			</div>
+			<div class="checkbox">
+				<label for="lucky">I'm feeling lucky <input ng-model="lucky" type="checkbox" id="lucky"></label>
+			</div>
 			<div ng-repeat="(position, result) in results" class="row">
 				<div class="col-lg-12">
 					<div class="result {{focusedResultPosition === position ? 'focused' : 'unfocused'}}">

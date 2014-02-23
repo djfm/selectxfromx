@@ -4,6 +4,9 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 
 	var database = null;
 	
+	// Space Key tabulates
+	$scope.lucky = true
+
 	// The user's query
 	$scope.query = '';
 
@@ -68,7 +71,7 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 
 	$scope.keydown = function(e)
 	{
-		if (e.keyCode === 9) // Tab key
+		if (e.keyCode === 9 || ($scope.lucky && e.keyCode === 32)) // Tab key
 		{
 			e.preventDefault();
 			var result = $scope.focusedResult();
