@@ -1,6 +1,7 @@
 function Database(data)
 {
-	var limit = 10;
+	var entityLimit = 10;
+	var dimensionLimit = 10;
 
 	var typesDensity = {};
 
@@ -32,7 +33,7 @@ function Database(data)
 			return b.score - a.score;
 		});
 
-		return results.slice(0, limit).map(function(result){
+		return results.slice(0, entityLimit).map(function(result){
 			return result.data;
 		});
 	};
@@ -66,6 +67,7 @@ function Database(data)
 		var entityType = filter.type.name;
 
 		var results = [];
+		var dimensionResults = [];
 		var dimensions = {};
 		var filters = {};
 
@@ -108,6 +110,7 @@ function Database(data)
 				{
 					results.push({score: score, data: {
 						handle: key,
+						key: key,
 						description: 'View'
 					}});
 				}
@@ -121,6 +124,7 @@ function Database(data)
 						if (dimensions[dimension])
 						{
 							dimensions[dimension].score += score;
+							dimensions[dimension].data.objects.insert(key);
 						}
 						else
 						{
@@ -130,11 +134,12 @@ function Database(data)
 									handle: dimension,
 									description: 'Filter by '+dimension,
 									kind: 'dimension',
-									dimension: dimension
+									dimension: dimension,
+									objects: new Set(key)
 								}
 							};
 
-							results.push(dimensions[dimension]);
+							dimensionResults.push(dimensions[dimension]);
 						}
 					}
 				}
@@ -180,11 +185,32 @@ function Database(data)
 			}
 		}
 
+		// Keep only *entityLimit* most accurate Entity results
+		results.sort(function(a, b){
+			return b.score - a.score;
+		});
+		results = results.slice(0, entityLimit);
+
+		var keys = results.map(function(result){return result.data.key;});
+
+		for (var d = 0; d < dimensionResults.length; d++)
+		{
+			// Add the dimension filter only if it is useful,
+			// i.e. if it may be used to display results that are not currently on screen
+			var useless = dimensionResults[d].data.objects.includedIn(keys);
+			if (!useless)
+			{
+				results.push(dimensionResults[d]);
+			}
+			console.log("Filter on", dimensionResults[d].data.dimension, useless ? "useless" : "kept")
+		}
+
+		// Sort results again, because we may have added a few!
 		results.sort(function(a, b){
 			return b.score - a.score;
 		});
 
-		return results.slice(0, limit).map(function(result){
+		return results.slice(0, entityLimit + dimensionLimit).map(function(result){
 			return result.data;
 		});
 	};
@@ -324,7 +350,7 @@ function Database(data)
 			return b.score - a.score;
 		});
 
-		return results.slice(0, limit).map(function(result){
+		return results.slice(0, entityLimit).map(function(result){
 			return result.data;
 		});
 	};

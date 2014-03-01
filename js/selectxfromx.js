@@ -96,6 +96,7 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 				{
 					$scope.filter.conditions.splice($scope.filter.conditions.length-1, 1);
 				}
+				$scope.queryChanged();
 			}
 		}
 		else if (e.keyCode === 38) // Up Arrow Key
