@@ -39,7 +39,7 @@
 					<div class="result {{focusedResultPosition === position ? 'focused' : 'unfocused'}}" ng-click="selectResult(result)">
 						<div class="row">
 							<div class="col-lg-6">{{result.handle}}</div>
-							<div class="col-lg-6">{{result.description}}</div>
+							<div class="col-lg-6">{{result.description}} <span class="label label-primary" ng-if="result.count">{{result.count}}</span></div>
 						</div>
 					</div>
 				</div>

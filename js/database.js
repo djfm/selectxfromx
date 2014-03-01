@@ -164,7 +164,8 @@ function Database(data)
 						var filterKey = filter.dimension+"="+values[v];
 						if (filters[filterKey])
 						{
-							filters[filterKey].score += score;	
+							filters[filterKey].score += score;
+							filters[filterKey].data.objects.insert(key);	
 						}
 						else
 						{
@@ -175,7 +176,8 @@ function Database(data)
 									description: values[v],
 									kind: 'filter',
 									dimension: filter.dimension,
-									value: values[v]
+									value: values[v],
+									objects: new Set(key)
 								}
 							};
 							results.push(filters[filterKey]);
@@ -185,34 +187,47 @@ function Database(data)
 			}
 		}
 
-		// Keep only *entityLimit* most accurate Entity results
-		results.sort(function(a, b){
-			return b.score - a.score;
-		});
-		results = results.slice(0, entityLimit);
-
-		var keys = results.map(function(result){return result.data.key;});
-
-		for (var d = 0; d < dimensionResults.length; d++)
+		if (filter.state === 'E')
 		{
-			// Add the dimension filter only if it is useful,
-			// i.e. if it may be used to display results that are not currently on screen
-			var useless = dimensionResults[d].data.objects.includedIn(keys);
-			if (!useless)
+			// Keep only *entityLimit* most accurate Entity results
+			results.sort(function(a, b){
+				return b.score - a.score;
+			});
+			results = results.slice(0, entityLimit);
+
+			var keys = results.map(function(result){return result.data.key;});
+
+			for (var d = 0; d < dimensionResults.length; d++)
 			{
-				results.push(dimensionResults[d]);
+				// Add the dimension filter only if it is useful,
+				// i.e. if it may be used to display results that are not currently on screen
+				var useless = dimensionResults[d].data.objects.includedIn(keys);
+				if (!useless)
+				{
+					results.push(dimensionResults[d]);
+				}
+				console.log("Filter on", dimensionResults[d].data.dimension, useless ? "useless" : "kept")
 			}
-			console.log("Filter on", dimensionResults[d].data.dimension, useless ? "useless" : "kept")
+
+			// Sort results again, because we may have added a few!
+			results.sort(function(a, b){
+				return b.score - a.score;
+			});
 		}
 
-		// Sort results again, because we may have added a few!
-		results.sort(function(a, b){
-			return b.score - a.score;
-		});
-
-		return results.slice(0, entityLimit + dimensionLimit).map(function(result){
+		results = results.slice(0, entityLimit + dimensionLimit).map(function(result){
+			if (result.data.objects)
+			{
+				result.data.count = result.data.objects.count();
+				// Angular does not need to know about this, it would make him crazy
+				delete result.data.objects;
+			}
 			return result.data;
 		});
+
+		console.log(results);
+
+		return results;
 	};
 
 	this.matchScore = function(haystack, needle)
