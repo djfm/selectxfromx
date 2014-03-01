@@ -2,15 +2,24 @@
 	"types": {
 		"Customer": {
 			"handle": "Customers...",
-			"description": "Manage customers"
+			"description": "Manage customers",
+			"kind": "type",
+			"name": "Customer",
+			"source": "json"
 		},
 		"Product": {
 			"handle": "Products...",
-			"description": "Manage products"
+			"description": "Manage products",
+			"kind": "type",
+			"name": "Product",
+			"source": "json"
 		},
 		"Module": {
 			"handle": "Modules...",
-			"description": "Manage modules"
+			"description": "Manage modules",
+			"kind": "type",
+			"name": "Module",
+			"source": "json"
 		}
 	},
 	"data": {

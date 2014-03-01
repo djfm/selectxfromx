@@ -15,6 +15,7 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 
 	// This is where we'll hold the current search status
 	$scope.filter = {
+		state: 'T',
 		type: null,
 		conditions: []
 	};
@@ -37,18 +38,14 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 			return;
 		}
 
-		$scope.results = [];
-		$scope.focusedResultPosition = 0;
+		database.select($scope.query, $scope.filter, function(results){
+			$scope.results = results;
+			$scope.focusedResultPosition = 0;
 
-		// User must first select a type of entity to search for
-		if (!$scope.filter.type)
-		{
-			$scope.results = database.findTypes($scope.query);	
-		}
-		else
-		{
-			$scope.results = database.find($scope.query, $scope.filter);
-		}
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
+		});
 	};
 
 	$scope.focusedResult = function ()
@@ -85,15 +82,19 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 		{
 			if ($scope.query.length === 0)
 			{
-				if ($scope.filter.conditions.length === 0)
+				if ($scope.filter.state === 'D')
 				{
+					$scope.filter.state = 'E';
+					$scope.filter.dimension = '';
+				}
+				else if ($scope.filter.conditions.length === 0)
+				{
+					$scope.filter.state = 'T';
 					$scope.filter.type = null;
-					$scope.queryChanged();
 				}
 				else
 				{
 					$scope.filter.conditions.splice($scope.filter.conditions.length-1, 1);
-					$scope.queryChanged();
 				}
 			}
 		}
@@ -126,15 +127,25 @@ selectxfromx.controller('SearchCtrl', function($scope, $http){
 		if (result.kind === 'type')
 		{
 			$scope.filter.type = result;
+			$scope.filter.state = 'E';
 			$scope.query = '';
 			$scope.queryChanged();
 		}
-		else if (result.kind === 'condition')
+		else if (result.kind === 'dimension')
+		{
+			$scope.filter.state = 'D';
+			$scope.filter.dimension = result.dimension;
+			$scope.query = '';
+			$scope.queryChanged();
+		}
+		else if (result.kind === 'filter')
 		{
 			$scope.filter.conditions.push({
 				dimension: result.dimension,
 				value: result.value
 			});
+			$scope.filter.state = 'E';
+			$scope.filter.dimension = '';
 			$scope.query = '';
 			$scope.queryChanged();
 		}

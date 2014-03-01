@@ -7,3 +7,13 @@ div.result.focused
 {
 	background-color: #EEE;
 }
+
+[ng-click]
+{
+	cursor: pointer;
+}
+
+[ng-click]:hover
+{
+	background-color: #EEF;
+}
