@@ -10,7 +10,12 @@
 	</head>
 	<body ng-app='selectxfromx' ng-controller='SearchCtrl'>
 		<div id="main" class="container" ng-keydown="keydown($event)">
-			<p>You are looking for <span class="label label-primary" ng-if="filter.type">{{filter.type.handle}}</span><span ng-if="!filter.type">...</span></p>
+			<p>
+				You are looking for <span class="label label-primary" ng-if="filter.type">{{filter.type.handle}}</span><span ng-if="!filter.type">...</span>
+			</p>
+			<p ng-if="filter.state === 'D'">
+				With a specific <span class="label label-warning">{{filter.dimension}}</span>...
+			</p>
 			<div ng-if="filter.conditions.length > 0">
 				<p>...that match the following criteria:</p>
 				<dl>
@@ -26,9 +31,12 @@
 					<p ng-if="focusedResultKind() === 'entity'" class="help-block">Hit Tab to display the focused entity's available actions.</p>
 				</div>
 			</div>
+			<div class="checkbox">
+				<label for="lucky">I'm feeling lucky (space key tabulates)<input ng-model="lucky" type="checkbox" id="lucky"></label>
+			</div>
 			<div ng-repeat="(position, result) in results" class="row">
 				<div class="col-lg-12">
-					<div class="result {{focusedResultPosition === position ? 'focused' : 'unfocused'}}">
+					<div class="result {{focusedResultPosition === position ? 'focused' : 'unfocused'}}" ng-click="selectResult(result)">
 						<div class="row">
 							<div class="col-lg-6">{{result.handle}}</div>
 							<div class="col-lg-6">{{result.description}}</div>
