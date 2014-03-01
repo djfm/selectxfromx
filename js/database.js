@@ -70,6 +70,12 @@ function Database(data)
 		var dimensionResults = [];
 		var dimensions = {};
 		var filters = {};
+		var activeFilters = {};
+
+		for (var c in filter.conditions)
+		{
+			activeFilters[filter.conditions[c].dimension+"="+filter.conditions[c].value] = true;
+		}
 
 		itemLoop:
 		for (var key in data.data)
@@ -125,6 +131,7 @@ function Database(data)
 						{
 							dimensions[dimension].score += score;
 							dimensions[dimension].data.objects.insert(key);
+							dimensions[dimension].data.values.insert(item.characteristics[dimension]);
 						}
 						else
 						{
@@ -135,7 +142,8 @@ function Database(data)
 									description: 'Filter by '+dimension,
 									kind: 'dimension',
 									dimension: dimension,
-									objects: new Set(key)
+									objects: new Set(key),
+									values: new Set(item.characteristics[dimension])
 								}
 							};
 
@@ -162,25 +170,29 @@ function Database(data)
 					if (score > 0 || query.length === 0)
 					{
 						var filterKey = filter.dimension+"="+values[v];
-						if (filters[filterKey])
+
+						if (!activeFilters[filterKey])
 						{
-							filters[filterKey].score += score;
-							filters[filterKey].data.objects.insert(key);	
-						}
-						else
-						{
-							filters[filterKey] = {
-								score: score,
-								data: {
-									handle: 'Filter by '+filter.dimension,
-									description: values[v],
-									kind: 'filter',
-									dimension: filter.dimension,
-									value: values[v],
-									objects: new Set(key)
-								}
-							};
-							results.push(filters[filterKey]);
+							if (filters[filterKey])
+							{
+								filters[filterKey].score += score;
+								filters[filterKey].data.objects.insert(key);	
+							}
+							else
+							{
+								filters[filterKey] = {
+									score: score,
+									data: {
+										handle: 'Filter by '+filter.dimension,
+										description: values[v],
+										kind: 'filter',
+										dimension: filter.dimension,
+										value: values[v],
+										objects: new Set(key)
+									}
+								};
+								results.push(filters[filterKey]);
+							}
 						}
 					}
 				}
@@ -189,6 +201,14 @@ function Database(data)
 
 		if (filter.state === 'E')
 		{
+			var activeConditions = {};
+			for (var i in filter.conditions)
+			{
+				activeConditions[filter.conditions[i].dimension] = 
+				(activeConditions[filter.conditions[i].dimension] || new Set())
+				.insert(filter.conditions[i].value);
+			}
+
 			// Keep only *entityLimit* most accurate Entity results
 			results.sort(function(a, b){
 				return b.score - a.score;
@@ -202,10 +222,19 @@ function Database(data)
 				// Add the dimension filter only if it is useful,
 				// i.e. if it may be used to display results that are not currently on screen
 				var useless = dimensionResults[d].data.objects.includedIn(keys);
+				var dimension = dimensionResults[d].data.dimension;
+				if (!useless && activeConditions[dimension])
+				{
+					useless = activeConditions[dimension].includes(dimensionResults[d].data.values.toArray());
+				}
 				if (!useless)
 				{
 					results.push(dimensionResults[d]);
 				}
+
+				// Do not keep this in Angular world
+				delete dimensionResults[d].data.values;
+
 				console.log("Filter on", dimensionResults[d].data.dimension, useless ? "useless" : "kept")
 			}
 

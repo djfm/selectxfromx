@@ -5,15 +5,24 @@ function Set()
 
 	this.insert = function(key)
 	{
-		if (data[key])
+		if (typeof key !== 'object')
 		{
-			data[key] += 1;
+			key = [key];
 		}
-		else
+
+		for (var k in key)
 		{
-			data[key] = 1;
-			count += 1;
+			if (data[key[k]])
+			{
+				data[key[k]] += 1;
+			}
+			else
+			{
+				data[key[k]] = 1;
+				count += 1;
+			}
 		}
+		return this;
 	};
 
 	this.count = function(str)

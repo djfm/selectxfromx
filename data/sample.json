@@ -328,7 +328,7 @@
 		"Headband Chaine Dorée": {"characteristics": {"Category": "Mariage"}, "type": "Product"},
 		"Boucles d'oreilles Fushia Perles": {"characteristics": {"Category": "Bijoux de créateurs"}, "type": "Product"},
 		"Urne Coeur de Papillon Vert anis": {"characteristics": {"Category": "Mariage"}, "type": "Product"},
-		"Coussin d'alliances Fleur de Cristal Turquoise": {"characteristics": {"Category": "Mariage"}, "type": "Product"},
+		"Coussin d'alliances Fleur de Cristal Turquoise": {"characteristics": {"Category": ["Mariage", "Machins"]}, "type": "Product"},
 		"Boîte CD souvenirs de mariage Chocolat": {"characteristics": {"Category": "Mariage"}, "type": "Product"},
 		"Ras de Cou Perles d'Argent": {"characteristics": {"Category": "Bijoux de créateurs"}, "type": "Product"},
 		"Marque Place invité Ivoire et Bordeaux": {"characteristics": {"Category": "Mariage"}, "type": "Product"},
