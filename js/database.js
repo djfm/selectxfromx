@@ -232,6 +232,7 @@ function Database(data)
 					results.push(dimensionResults[d]);
 				}
 
+				dimensionResults[d].data.valuesCount = dimensionResults[d].data.values.count();
 				// Do not keep this in Angular world
 				delete dimensionResults[d].data.values;
 
