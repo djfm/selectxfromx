@@ -1,0 +1,37 @@
+<div id="search-container" ng-controller='SearchCtrl' ng-keydown="keydown($event)">
+  <input id="search-input" class="form-control" type="text" ng-model="query" ng-change="queryChanged()" placeholder="What are you looking for ?">
+    <!-- <p ng-if="focusedResultKind() === 'type'" class="help-block">Hit Tab to search for this kind of entity.</p>
+        <p ng-if="focusedResultKind() === 'condition'" class="help-block">Hit Tab to use the focused result as a search condition.</p>
+        <p ng-if="focusedResultKind() === 'entity'" class="help-block">Hit Tab to display the focused entity's available actions.</p> -->
+    <!-- <p class="checkbox">
+      <label for="lucky">I'm feeling lucky (space key tabulates)<input ng-model="lucky" type="checkbox" id="lucky"></label>
+    </p> -->
+  <div ng-if="results.length > 0" class="result-container">
+    <div ng-repeat="(position, result) in results">
+      <div class="result {{focusedResultPosition === position ? 'focused' : 'unfocused'}}" ng-click="selectResult(result)">
+          <span class="result-icon">
+            <i class="fa fa-search"></i>
+          </span>
+          <span class="result-title">
+            {{result.handle}}
+          </span>
+          <span class="result-description">
+            {{result.description}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <ol class="breadcrumb" ng-if="filter.type">
+      <li ng-if="filter.type">
+          {{filter.type.handle}}
+      </li>
+      <li ng-if="!filter.type"></li>
+      <li ng-repeat="condition in filter.conditions">
+        {{condition.dimension}}:{{condition.value}}
+      </li>
+      <li ng-if="filter.state === 'D'">
+        by {{filter.dimension}}...
+      </li>
+    </ol>
+  </div>
+</div>
