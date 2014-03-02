@@ -7,6 +7,8 @@ $brand-primary: #6BC588
 @import "sass-bootstrap/lib/bootstrap"
 @import "Font-Awesome/scss/font-awesome"
 
+::-webkit-input-placeholder
+	color: #f00
 
 body
 	background-color: #333
@@ -21,6 +23,12 @@ body
 	background: #eee
 	@include box-shadow(white 0 0 0 4px inset, rgba(black,.2) 0 0 0 6px)
 	@include border-radius(10px)
+	.breadcrumb
+		margin: 5px 0 0 0
+		font-size: 0.9em
+		color: darken(#eee,35%)
+		background-color: darken(#eee,5%)
+		@include border-radius(0)
 	#search-input
 		font-size: 1.15em
 		padding: 20px 10px
@@ -42,9 +50,10 @@ body
 			overflow: hidden
 			line-height: 56px
 			margin-right: 6px
-			background-color: gray
+			background-color: #aaa
 			text-align: center
 			i
+				color: #666
 				@extend .fa-2x
 				@extend .fa-fw
 		.result-title
