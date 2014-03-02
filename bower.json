@@ -11,8 +11,8 @@
     "angular-cookies": "1.2.6",
     "angular-sanitize": "1.2.6",
     "angular-route": "1.2.6",
-    "angular-animate" : "~1.0",
-    "Font-Awesome" : "~4.0"
+    "angular-animate" : "~1.2.14",
+    "Font-Awesome" : "https://github.com/FortAwesome/Font-Awesome/tree/4.0.4-wip"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",
