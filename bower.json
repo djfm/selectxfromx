@@ -12,7 +12,7 @@
     "angular-sanitize": "1.2.6",
     "angular-route": "1.2.6",
     "angular-animate" : "~1.2.14",
-    "Font-Awesome" : "https://github.com/FortAwesome/Font-Awesome/tree/4.0.4-wip"
+    "Font-Awesome" : "font-awesome#ca228d8"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",
